@@ -1,0 +1,12 @@
+{
+  "name": "opencode-lens-image-preview",
+  "version": "0.1.0",
+  "description": "Lens plugin: preview agent-generated images and screenshots inline in OpenCode Web chat.",
+  "license": "MIT",
+  "type": "module",
+  "keywords": ["opencode", "lens", "plugin", "image", "preview"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Flickwire-Agent/opencode-lens-image-preview.git"
+  }
+}
