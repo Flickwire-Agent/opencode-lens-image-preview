@@ -1,5 +1,5 @@
 {
   "name": "Image Preview",
-  "description": "Displays agent-generated images, screenshots, and local image files inline in the chat. Supports markdown image syntax (![alt](path)), image URLs, and local file paths. Click an image to expand.",
+  "description": "Renders images from URLs inline in OpenCode Web chat. Supports markdown image syntax (![alt](url)) and raw image URLs. Click an image to expand.",
   "script": "./plugin.js"
 }

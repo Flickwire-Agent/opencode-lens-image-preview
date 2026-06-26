@@ -7,8 +7,6 @@
     "(https?://[^\\s<>\"']+\\.(?:" + IMG_EXTS + ")(?:\\?[^\\s<>\"']*)?)",
     "gi",
   );
-  var LOCAL_RE = new RegExp("((?:/[^\\s<>\"']+)+?\\.(?:" + IMG_EXTS + "))", "gi");
-  var TILDE_RE = new RegExp("(~[^\\s<>\"']+\\.(?:" + IMG_EXTS + "))", "gi");
 
   function injectStyles() {
     if (document.getElementById("lens-img-style")) return;
@@ -31,21 +29,15 @@
   function hasImageRefs(text) {
     MARKDOWN_RE.lastIndex = 0;
     URL_RE.lastIndex = 0;
-    LOCAL_RE.lastIndex = 0;
-    TILDE_RE.lastIndex = 0;
-    return (
-      MARKDOWN_RE.test(text) || URL_RE.test(text) || LOCAL_RE.test(text) || TILDE_RE.test(text)
-    );
+    return MARKDOWN_RE.test(text) || URL_RE.test(text);
   }
 
   function buildImageElement(src, alt) {
-    var imgSrc = /^https?:\/\//i.test(src) ? src : "/__lens/files/" + encodeURIComponent(src);
-
     var wrap = document.createElement("span");
     wrap.className = "lens-img-wrap";
 
     var img = document.createElement("img");
-    img.src = imgSrc;
+    img.src = src;
     img.alt = alt || "";
     img.loading = "lazy";
 
@@ -104,26 +96,6 @@
       });
     }
 
-    LOCAL_RE.lastIndex = 0;
-    while ((m = LOCAL_RE.exec(text)) !== null) {
-      matches.push({
-        start: m.index,
-        end: m.index + m[0].length,
-        alt: "",
-        src: m[1],
-      });
-    }
-
-    TILDE_RE.lastIndex = 0;
-    while ((m = TILDE_RE.exec(text)) !== null) {
-      matches.push({
-        start: m.index,
-        end: m.index + m[0].length,
-        alt: "",
-        src: m[1],
-      });
-    }
-
     if (matches.length === 0) return;
 
     matches.sort(function (a, b) {
@@ -156,21 +128,6 @@
     node.parentNode.replaceChild(fragment, node);
   }
 
-  function fixExistingImgElements() {
-    var imgs = document.querySelectorAll("img:not([data-lens-fixed])");
-    for (var i = 0; i < imgs.length; i++) {
-      var img = imgs[i];
-      img.setAttribute("data-lens-fixed", "true");
-      var origSrc = img.getAttribute("src") || img.src || "";
-      if (origSrc && !/^https?:\/\//i.test(origSrc) && !origSrc.startsWith("data:")) {
-        img.src = "/__lens/files/" + encodeURIComponent(origSrc);
-      }
-      img.addEventListener("click", function () {
-        this.classList.toggle("lens-img-expanded");
-      });
-    }
-  }
-
   var scanTimer = null;
 
   function scheduleScan(delay) {
@@ -179,8 +136,6 @@
   }
 
   function scanMessages() {
-    fixExistingImgElements();
-
     var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
       acceptNode: function (node) {
         if (node._lensProcessed) return NodeFilter.FILTER_REJECT;
