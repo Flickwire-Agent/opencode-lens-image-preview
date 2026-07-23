@@ -26,6 +26,15 @@
     return false;
   }
 
+  function isPluginContent(node) {
+    var el = node.parentElement;
+    while (el) {
+      if (el.hasAttribute("data-lens-image-preview")) return true;
+      el = el.parentElement;
+    }
+    return false;
+  }
+
   function hasImageRefs(text) {
     MARKDOWN_RE.lastIndex = 0;
     URL_RE.lastIndex = 0;
@@ -35,6 +44,7 @@
   function buildImageElement(src, alt) {
     var wrap = document.createElement("span");
     wrap.className = "lens-img-wrap";
+    wrap.setAttribute("data-lens-image-preview", "");
 
     var img = document.createElement("img");
     img.src = src;
@@ -51,7 +61,7 @@
       var err = document.createElement("span");
       err.className = "lens-img-label";
       err.textContent = "[Image unavailable: " + src + "]";
-      this.parentNode.parentNode?.insertBefore(err, this.parentNode.nextSibling);
+      this.parentNode.appendChild(err);
     });
 
     wrap.appendChild(img);
@@ -60,7 +70,7 @@
       var label = document.createElement("span");
       label.className = "lens-img-label";
       label.textContent = alt;
-      wrap.parentNode?.insertBefore(label, wrap.nextSibling);
+      wrap.appendChild(label);
     }
 
     return wrap;
@@ -141,6 +151,7 @@
         if (node._lensProcessed) return NodeFilter.FILTER_REJECT;
         if (!node.textContent || !node.textContent.trim()) return NodeFilter.FILTER_REJECT;
         if (isInCodeBlock(node)) return NodeFilter.FILTER_REJECT;
+        if (isPluginContent(node)) return NodeFilter.FILTER_REJECT;
         return NodeFilter.FILTER_ACCEPT;
       },
     });
