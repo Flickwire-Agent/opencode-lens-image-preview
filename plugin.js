@@ -13,7 +13,7 @@
     var style = document.createElement("style");
     style.id = "lens-img-style";
     style.textContent =
-      ".lens-img-wrap{display:inline-block;margin:8px 0;max-width:100%;line-height:0}.lens-img-wrap img{display:block;max-width:100%;max-height:60vh;object-fit:contain;cursor:zoom-in;border-radius:8px;transition:max-height .2s ease}.lens-img-wrap img.lens-img-expanded{max-height:none;cursor:zoom-out}.lens-img-label{display:block;font-size:12px;line-height:1.4;margin-top:2px;color:color-mix(in srgb,currentColor 58%,transparent);font-family:ui-monospace,monospace}";
+      ".lens-img-wrap{display:inline-block;margin:8px 0;max-width:100%;line-height:0}.lens-img-wrap img{display:block;max-width:100%;max-height:60vh;object-fit:contain;cursor:zoom-in;border-radius:8px;transition:max-height .2s ease}.lens-img-wrap img:focus-visible{outline:2px solid currentColor;outline-offset:3px}.lens-img-wrap img.lens-img-expanded{max-height:none;cursor:zoom-out}.lens-img-label{display:block;font-size:12px;line-height:1.4;margin-top:2px;color:color-mix(in srgb,currentColor 58%,transparent);font-family:ui-monospace,monospace}";
     document.head.appendChild(style);
   }
 
@@ -50,9 +50,22 @@
     img.src = src;
     img.alt = alt || "";
     img.loading = "lazy";
+    img.setAttribute("role", "button");
+    img.setAttribute("tabindex", "0");
+    img.setAttribute("aria-expanded", "false");
+    img.setAttribute("aria-label", "Expand image" + (alt ? ": " + alt : ""));
 
-    img.addEventListener("click", function () {
-      this.classList.toggle("lens-img-expanded");
+    function toggleImage() {
+      var expanded = img.classList.toggle("lens-img-expanded");
+      img.setAttribute("aria-expanded", String(expanded));
+      img.setAttribute("aria-label", (expanded ? "Collapse" : "Expand") + " image" + (alt ? ": " + alt : ""));
+    }
+
+    img.addEventListener("click", toggleImage);
+    img.addEventListener("keydown", function (event) {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      event.preventDefault();
+      toggleImage();
     });
 
     img.addEventListener("error", function () {

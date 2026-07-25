@@ -7,7 +7,7 @@ A [Lens](https://github.com/Flickwire-Agent/opencode-lens) plugin that renders i
 - **Markdown image syntax** — `![alt](url)` renders as an inline image
 - **Remote URLs** — image URLs ending in `.png`, `.jpg`, `.gif`, `.webp`, etc. are detected automatically
 - **Code block protection** — image references inside `<code>`/`<pre>` blocks are ignored
-- **Click to expand** — toggle between a 60vh constraint and full natural size
+- **Expandable previews** — click, Enter, or Space toggles between a 60vh constraint and full natural size
 - **Lazy loading** — images load on demand as they scroll into view
 - **Error fallback** — broken or missing images show a descriptive text placeholder
 - **Dynamic** — uses `MutationObserver` to process messages as they stream in
@@ -51,7 +51,7 @@ Once installed, image URLs in OpenCode Web chat messages are automatically rende
 | Markdown image | `![Logo](https://example.com/logo.png)` |
 | Raw URL | `https://example.com/diagram.png` |
 
-Click any rendered image to toggle between constrained and full-size view.
+Click a rendered image, or focus it and press Enter or Space, to toggle between constrained and full-size view.
 
 ## How it works
 
