@@ -73,6 +73,7 @@
       this.style.display = "none";
       var err = document.createElement("span");
       err.className = "lens-img-label";
+      err.setAttribute("role", "alert");
       err.textContent = "[Image unavailable: " + src + "]";
       this.parentNode.appendChild(err);
     });
