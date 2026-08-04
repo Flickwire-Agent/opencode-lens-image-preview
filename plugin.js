@@ -41,6 +41,15 @@
     return MARKDOWN_RE.test(text) || URL_RE.test(text);
   }
 
+  function isRemoteImageSource(src) {
+    try {
+      var url = new URL(src);
+      return url.protocol === "http:" || url.protocol === "https:";
+    } catch {
+      return false;
+    }
+  }
+
   function buildImageElement(src, alt) {
     var wrap = document.createElement("span");
     wrap.className = "lens-img-wrap";
@@ -102,6 +111,7 @@
 
     MARKDOWN_RE.lastIndex = 0;
     while ((m = MARKDOWN_RE.exec(text)) !== null) {
+      if (!isRemoteImageSource(m[2])) continue;
       matches.push({
         start: m.index,
         end: m.index + m[0].length,
