@@ -8,5 +8,8 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Flickwire-Agent/opencode-lens-image-preview.git"
+  },
+  "scripts": {
+    "check": "node --check plugin.js"
   }
 }

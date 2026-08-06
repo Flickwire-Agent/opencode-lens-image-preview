@@ -199,12 +199,16 @@
       for (var i = 0; i < mutations.length; i++) {
         if (mutations[i].addedNodes.length > 0) {
           hasAdditions = true;
-          break;
+        }
+        if (mutations[i].type === "characterData") {
+          // Streamed assistant responses can extend an existing text node.
+          mutations[i].target._lensProcessed = false;
+          hasAdditions = true;
         }
       }
       if (hasAdditions) scheduleScan(200);
     });
-    observer.observe(document.body, { childList: true, subtree: true });
+    observer.observe(document.body, { childList: true, characterData: true, subtree: true });
   }
 
   function init() {

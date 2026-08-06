@@ -55,7 +55,13 @@ Click a rendered image, or focus it and press Enter or Space, to toggle between 
 
 ## How it works
 
-The plugin runs as a browser script injected by Lens into the OpenCode Web page. It registers a `MutationObserver` on `document.body` and scans new text nodes for image URL references. Images are loaded directly from their remote URLs.
+The plugin runs as a browser script injected by Lens into the OpenCode Web page. It registers a `MutationObserver` on `document.body` and scans new or streamed text nodes for image URL references. Images are loaded directly from their remote URLs.
+
+## Checks
+
+```bash
+pnpm check
+```
 
 ## License
 
