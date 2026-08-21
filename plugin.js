@@ -159,7 +159,10 @@
       fragment.appendChild(document.createTextNode(text.slice(pos)));
     }
 
-    node.parentNode.replaceChild(fragment, node);
+    // A chat re-render may detach queued nodes before the deferred scan runs.
+    if (node.parentNode) {
+      node.parentNode.replaceChild(fragment, node);
+    }
   }
 
   var scanTimer = null;
